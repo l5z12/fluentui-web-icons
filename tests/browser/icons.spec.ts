@@ -39,8 +39,9 @@ test('lazy loading deduplicates modules and updateComplete includes loading', as
 
 test('shows a skeleton while a family is requested and skips it when cached', async ({ page }) => {
   const result = await page.evaluate(async () => {
-    const { defineFluentIcon, registerIcons } = await import('/dist/index.js');
-    await import('/dist/auto.js');
+    const entry = '/dist/index.js', auto = '/dist/auto.js';
+    const { defineFluentIcon, registerIcons } = await import(entry);
+    await import(auto);
     const lazy = document.createElement('fluent-icon');
     lazy.name = 'home';
     document.body.append(lazy);
