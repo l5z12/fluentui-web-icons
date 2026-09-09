@@ -39,8 +39,8 @@ Keep the published package dependency-free. Demo Fluent UI controls stay in
 `demo/`; they must not become runtime dependencies.
 
 The package version must match the installed `@fluentui/svg-icons` version.
-Icon catalog updates are automated; wrapper-only changes have to wait for the
-next upstream version or ship in the same sync.
+The first npm release is `bun run release:first` after `npm login`. Later icon
+catalog updates are automated once trusted publishers are configured.
 
 ## Explorer deploy
 

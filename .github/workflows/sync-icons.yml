@@ -50,6 +50,8 @@ jobs:
           git rev-parse "v${version}" >/dev/null 2>&1 || git tag "v${version}"
           git push origin "HEAD:refs/heads/${{ github.event.repository.default_branch }}"
           git push origin "v${version}"
+      - if: steps.check.outputs.listed != 'true'
+        run: echo "The first npm release must be published from a maintainer machine. Automated publish stays off until the package exists and trusted publishers are configured."
       - if: steps.check.outputs.release == 'true'
         run: bun scripts/set-publish-metadata.ts
       - if: steps.check.outputs.release == 'true'
