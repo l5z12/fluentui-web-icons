@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Fluent System Icons (upstream artwork)
+    url: https://github.com/microsoft/fluentui-system-icons/issues
+    about: Request new icons, sizes, or artwork changes from Microsoft.
+  - name: Icon explorer
+    url: https://icons.l5z12.dev
+    about: Search and preview the generated web components.

@@ -1,0 +1,3 @@
+- [ ] `bun run check` (or this is docs-only)
+- [ ] User-facing changes are reflected in the README
+- [ ] I did not hand-edit `src/generated/`

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+site/
+demo/generated/
+src/generated/
+src/.generated-staging/
+test-results/
+playwright-report/
+*.tgz
+.DS_Store
+.wrangler/

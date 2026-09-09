@@ -1,0 +1,99 @@
+{
+  "name": "fluentui-web-icons",
+  "version": "1.1.339",
+  "description": "Unofficial Fluent System Icons as lightweight, accessible native web components.",
+  "type": "module",
+  "license": "MIT",
+  "author": "L5Z12 as well as fluentui-web-icons contributors",
+  "packageManager": "bun@1.3.14",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/auto.js",
+  "jsdelivr": "./dist/auto.js",
+  "customElements": "custom-elements.json",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./auto": {
+      "types": "./dist/auto.d.ts",
+      "import": "./dist/auto.js",
+      "default": "./dist/auto.js"
+    },
+    "./lazy": {
+      "types": "./dist/lazy.d.ts",
+      "import": "./dist/lazy.js",
+      "default": "./dist/lazy.js"
+    },
+    "./catalog": {
+      "types": "./dist/generated/catalog.d.ts",
+      "import": "./dist/generated/catalog.js",
+      "default": "./dist/generated/catalog.js"
+    },
+    "./icons/*": {
+      "types": "./dist/generated/icons/*.d.ts",
+      "import": "./dist/generated/icons/*.js"
+    },
+    "./custom-elements.json": "./custom-elements.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "custom-elements.json",
+    "dist"
+  ],
+  "sideEffects": ["./dist/auto.js"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "generate": "bun scripts/generate.ts",
+    "icons:check": "bun scripts/check-upstream.ts",
+    "icons:update": "bun update @fluentui/svg-icons --latest && bun scripts/prepare-icon-release.ts && bun run build && bun run test",
+    "build": "bun run generate && bun scripts/build.ts",
+    "dev": "bun run build && bun scripts/serve.ts --dev",
+    "preview": "bun scripts/serve.ts",
+    "site": "bun run build && bun scripts/stage-site.ts",
+    "deploy": "bun run site && wrangler deploy",
+    "preview:site": "bun run site && wrangler dev",
+    "typecheck": "bun run generate && tsc --noEmit",
+    "test": "bun run generate && bun test tests/unit",
+    "test:browser": "bun run build && bunx playwright test",
+    "verify:generation": "bun scripts/verify-generation.ts",
+    "verify:package": "bun run build && bun scripts/verify-package.ts",
+    "check": "bun run typecheck && bun run test && bun run test:browser",
+    "prepack": "bun run build"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.4",
+    "@fluentui/svg-icons": "1.1.339",
+    "@fluentui/tokens": "1.0.0-alpha.24",
+    "@fluentui/web-components": "3.1.3",
+    "@microsoft/fast-element": "3.0.2",
+    "@playwright/test": "1.63.0",
+    "@types/bun": "1.4.2",
+    "@xmldom/xmldom": "0.9.12",
+    "publint": "0.3.24",
+    "typescript": "7.0.2",
+    "wrangler": "4.130.0"
+  },
+  "keywords": [
+    "fluentui",
+    "fluent-system-icons",
+    "icons",
+    "web-components",
+    "custom-elements",
+    "svg",
+    "typescript"
+  ]
+}

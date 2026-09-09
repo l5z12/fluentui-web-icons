@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "fluentui-web-icons",
+  "compatibility_date": "2026-09-09",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    {
+      "pattern": "icons.l5z12.dev",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

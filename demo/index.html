@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Explore regular, filled, and color Fluent System Icons as native web components." />
+    <title>Fluent icons — Web components</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f6cbd'/%3E%3Cpath d='M10 8h14v5H15v3h7v5h-7v5h-5z' fill='white'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="./" aria-label="Fluent icons home"><span class="brand-mark">f.</span><span>fluent<span class="brand-light">icons</span></span></a>
+      <div class="edition">THE WEB COMPONENT COLLECTION</div>
+      <nav aria-label="Main navigation">
+        <fluent-button id="explorer-nav" appearance="subtle" class="nav-item active" aria-current="page"><fluent-icon slot="start" name="grid" size="20"></fluent-icon>Icon explorer</fluent-button>
+        <fluent-button id="guide-nav" appearance="subtle" class="nav-item"><fluent-icon slot="start" name="code" size="20"></fluent-icon>Get started</fluent-button>
+      </nav>
+      <div class="sidebar-note"><span class="tiny-label">BUILT ON STANDARDS</span><p>One little element.<br>Everywhere on the web.</p><div class="platforms"><fluent-badge appearance="outline" color="informative" size="small">HTML</fluent-badge><fluent-badge appearance="outline" color="informative" size="small">React</fluent-badge><fluent-badge appearance="outline" color="informative" size="small">Vue</fluent-badge><fluent-badge appearance="outline" color="informative" size="small">+ more</fluent-badge></div></div>
+      <div class="sidebar-bottom"><a href="https://github.com/microsoft/fluentui-system-icons" target="_blank" rel="noreferrer">Microsoft Fluent System Icons <span>↗</span></a><p>Open source · MIT licensed</p></div>
+    </aside>
+    <main>
+      <header class="topbar"><div><span class="status-dot"></span>Fluent UI Web Components <span class="divider">/</span> v3.1.3</div><fluent-button id="theme" appearance="subtle" icon-only aria-label="Switch to dark theme"><fluent-icon name="weather-moon" size="20"></fluent-icon></fluent-button></header>
+      <section class="page-heading"><div class="eyebrow">SMALL DETAILS. ENDLESS POSSIBILITIES.</div><h1>Familiar icons.<br><span>A fluent web.</span></h1><p>Thoughtfully crafted by Microsoft. Ready for any framework.<br>Find your icon, make it yours, and drop it into your next idea.</p><div class="stats"><span><strong id="family-count"></strong> icon families</span><i></i><span>Regular, filled & color</span><i></i><span>Zero icon runtime dependencies</span></div></section>
+      <section id="explorer" aria-label="Icon explorer">
+        <div class="collection-heading"><h2>The collection <fluent-badge id="collection-count" appearance="tint" color="informative"></fluent-badge></h2><span class="hint">A little inspiration, one icon at a time.</span></div>
+        <div class="toolbar">
+          <fluent-text-input id="search" appearance="outline" placeholder="Search icons…" aria-label="Search icons" autocomplete="off"><fluent-icon slot="start" name="search" size="20"></fluent-icon><kbd slot="end">/</kbd></fluent-text-input>
+          <div class="segmented" role="group" aria-label="Icon style"><fluent-button data-variant="regular" appearance="subtle" aria-pressed="false">Regular</fluent-button><fluent-button data-variant="filled" appearance="subtle" aria-pressed="false">Filled</fluent-button><fluent-button data-variant="color" appearance="primary" aria-pressed="true">Color</fluent-button></div>
+          <fluent-dropdown id="size" aria-label="Icon size"><fluent-listbox><fluent-option value="16">16 px</fluent-option><fluent-option value="20">20 px</fluent-option><fluent-option value="24" selected>24 px</fluent-option><fluent-option value="28">28 px</fluent-option><fluent-option value="32">32 px</fluent-option><fluent-option value="48">48 px</fluent-option></fluent-listbox></fluent-dropdown>
+        </div>
+        <div class="collection-layout">
+          <div class="gallery"><div class="results-line"><span id="results-count" role="status"></span><span>Click an icon to inspect</span></div><div id="icon-grid" class="icon-grid"></div><div id="empty" class="empty" hidden><fluent-icon name="search" size="40"></fluent-icon><h3>No icons found</h3><p>Try a shorter name, like “arrow” or “mail”.</p><fluent-button id="clear-search" appearance="primary">Clear search</fluent-button></div><div class="pagination"><fluent-button id="previous" appearance="outline" size="small">← Previous</fluent-button><span id="page-count"></span><fluent-button id="next" appearance="outline" size="small">Next →</fluent-button></div></div>
+          <aside class="inspector" aria-label="Selected icon">
+            <div class="inspector-top"><span class="tiny-label">A CLOSER LOOK</span><fluent-badge appearance="tint" color="success" size="small">Live preview</fluent-badge></div>
+            <div class="preview-grid"><fluent-icon id="preview" name="mail" variant="color" size="72"></fluent-icon></div>
+            <div class="inspector-body">
+              <h3 id="selected-name">mail</h3><p id="selected-meta"></p>
+              <p id="original-palette" class="palette-note"><fluent-icon name="color" size="16"></fluent-icon>Original colors & gradients</p>
+              <fluent-field id="tint-field"><fluent-label slot="label">Icon color</fluent-label><fluent-text-input slot="input" id="color" aria-label="Icon color" value="#0f6cbd" maxlength="7" placeholder="#0f6cbd"></fluent-text-input></fluent-field>
+              <fluent-field class="label-field"><fluent-label slot="label">Accessible label</fluent-label><fluent-text-input slot="input" id="label" aria-label="Accessible label" placeholder="Optional, e.g. Inbox"></fluent-text-input></fluent-field>
+              <div class="code-heading"><span>YOUR WEB COMPONENT</span><fluent-button id="copy-markup" appearance="subtle" size="small">Copy</fluent-button></div><pre><code id="markup"></code></pre>
+              <fluent-button id="copy-import" appearance="primary"><fluent-icon slot="start" name="copy" size="18"></fluent-icon>Copy import code</fluent-button>
+              <p class="inspector-footnote">Native elements. Beautiful at every size.<br>Built for the way you build.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section id="guide" class="guide" hidden><div class="collection-heading"><h2>A small API. A quick start.</h2><fluent-badge appearance="tint" color="brand">Bun powered</fluent-badge></div><div class="guide-cards"><article><span class="step">01 / REGISTER</span><h3>Only the icons you need.</h3><p>Import families individually for a smaller bundle. Each family includes all available sizes and styles, including color.</p><pre><code>import { defineFluentIcon, registerIcons }
+  from 'fluentui-web-icons';
+import mail from 'fluentui-web-icons/icons/mail';
+
+registerIcons(mail);
+defineFluentIcon();</code></pre></article><article><span class="step">02 / USE</span><h3>A little more color.</h3><p>Color icons preserve their original palette, gradients, and shadows. Give meaningful icons an accessible label.</p><pre><code>&lt;fluent-icon
+  name="mail"
+  variant="color"
+  size="24"
+  label="Inbox"
+&gt;&lt;/fluent-icon&gt;</code></pre></article><article><span class="step">03 / EXPLORE</span><h3>The whole catalog, on demand.</h3><p>The auto entry registers the element and loads requested icon families as separate modules. No external CDN requests.</p><pre><code>import 'fluentui-web-icons/auto';
+
+// Preload before it appears on screen:
+import { loadIcon } from 'fluentui-web-icons';
+await loadIcon('mail');</code></pre></article><article><span class="step">04 / CUSTOMIZE</span><h3>Part of your design system.</h3><p>Regular and filled icons inherit your text color. The demo itself uses Fluent UI buttons, inputs, dropdowns, fields, badges, and theme tokens.</p><pre><code>fluent-icon {
+  color: var(--colorBrandForeground1);
+  --fluent-icon-size: 1.5rem;
+}
+
+&lt;fluent-icon name="arrow-left" flip-rtl&gt;
+&lt;/fluent-icon&gt;</code></pre></article></div></section>
+      <footer><span>Built with Fluent UI Web Components.</span><span>Fluent System Icons <span id="upstream-version"></span> · Microsoft · MIT</span></footer>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

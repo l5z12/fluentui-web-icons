@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "README.md",
+  "modules": [{
+    "kind": "javascript-module",
+    "path": "dist/fluent-icon.js",
+    "declarations": [{
+      "kind": "class",
+      "name": "FluentIcon",
+      "tagName": "fluent-icon",
+      "customElement": true,
+      "description": "An accessible, decorative-by-default Fluent System Icon. Register imported families or enable the optional lazy loader.",
+      "superclass": { "name": "HTMLElement" },
+      "attributes": [
+        { "name": "name", "fieldName": "name", "type": { "text": "string" }, "description": "Icon family in kebab-case or upstream snake_case." },
+        { "name": "variant", "fieldName": "variant", "type": { "text": "'regular' | 'filled' | 'color'" }, "default": "'regular'" },
+        { "name": "size", "fieldName": "size", "type": { "text": "number | undefined" }, "description": "Positive pixel size; omitted inherits 1em. Selects the nearest available optical design." },
+        { "name": "label", "fieldName": "label", "type": { "text": "string" }, "description": "Accessible image name. Omit for decorative icons." },
+        { "name": "flip-rtl", "fieldName": "flipRtl", "type": { "text": "boolean" }, "description": "Mirror under inherited RTL direction." }
+      ],
+      "members": [
+        { "kind": "field", "name": "name", "type": { "text": "string" } },
+        { "kind": "field", "name": "variant", "type": { "text": "'regular' | 'filled' | 'color'" } },
+        { "kind": "field", "name": "size", "type": { "text": "number | undefined" } },
+        { "kind": "field", "name": "label", "type": { "text": "string" } },
+        { "kind": "field", "name": "flipRtl", "type": { "text": "boolean" } },
+        { "kind": "field", "name": "updateComplete", "readonly": true, "type": { "text": "Promise<void>" } },
+        { "kind": "method", "name": "refresh", "return": { "type": { "text": "Promise<void>" } }, "description": "Retry a failed request or refresh the icon." }
+      ],
+      "events": [
+        { "name": "icon-load", "type": { "text": "CustomEvent<IconLoadDetail>" }, "description": "Bubbles and is composed. Detail contains name and actual design variant/size." },
+        { "name": "icon-error", "type": { "text": "CustomEvent<IconErrorDetail>" }, "description": "Bubbles and is composed. Detail contains name and error." }
+      ],
+      "cssProperties": [{ "name": "--fluent-icon-size", "description": "CSS length overriding visual width and height. Does not change optical design selection.", "default": "1em" }],
+      "cssParts": [{ "name": "svg", "description": "The SVG element in the open shadow root." }]
+    }],
+    "exports": [{ "kind": "js", "name": "FluentIcon", "declaration": { "name": "FluentIcon", "module": "dist/fluent-icon.js" } }]
+  }]
+}

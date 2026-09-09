@@ -1,0 +1,35 @@
+name: Bug
+description: Something is wrong in this web component wrapper.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Use this for the `<fluent-icon>` wrapper, generator, or package. New Microsoft artwork belongs in fluentui-system-icons.
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal HTML or import snippet. Include icon name, variant, and size when relevant.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 1.1.339
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS

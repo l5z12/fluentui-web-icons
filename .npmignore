@@ -1,0 +1,17 @@
+# npm uses this instead of .gitignore. Keep dist/ publishable; "files" is the allowlist.
+node_modules/
+src/
+scripts/
+tests/
+demo/
+site/
+.github/
+wrangler.jsonc
+test-results/
+playwright-report/
+*.tgz
+.DS_Store
+playwright.config.ts
+tsconfig.json
+tsconfig.build.json
+bun.lock
