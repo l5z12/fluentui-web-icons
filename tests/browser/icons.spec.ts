@@ -37,6 +37,40 @@ test('lazy loading deduplicates modules and updateComplete includes loading', as
   expect(requests.some((url) => url.endsWith('/icons/mail.js'))).toBe(false);
 });
 
+test('shows a skeleton while a family is requested and skips it when cached', async ({ page }) => {
+  const result = await page.evaluate(async () => {
+    const { defineFluentIcon, registerIcons } = await import('/dist/index.js');
+    await import('/dist/auto.js');
+    const lazy = document.createElement('fluent-icon');
+    lazy.name = 'home';
+    document.body.append(lazy);
+    await Promise.resolve();
+    const loading = !!lazy.shadowRoot!.querySelector('[part="skeleton"]');
+    await lazy.updateComplete;
+    const after = !!lazy.shadowRoot!.querySelector('[part="skeleton"]');
+    const cached = document.createElement('fluent-icon');
+    cached.name = 'home';
+    document.body.append(cached);
+    await Promise.resolve();
+    const skipped = !cached.shadowRoot!.querySelector('[part="skeleton"]');
+    await cached.updateComplete;
+    registerIcons({ name: 'unit-cached', glyphs: [{ size: 24, variant: 'regular', paths: [{ d: 'M0 0h24v24H0z' }] }] });
+    defineFluentIcon();
+    const registered = document.createElement('fluent-icon');
+    registered.name = 'unit-cached';
+    document.body.append(registered);
+    await Promise.resolve();
+    const registeredSkip = !registered.shadowRoot!.querySelector('[part="skeleton"]');
+    await registered.updateComplete;
+    return { loading, after, skipped, registeredSkip, paths: lazy.shadowRoot!.querySelectorAll('path').length };
+  });
+  expect(result.loading).toBe(true);
+  expect(result.after).toBe(false);
+  expect(result.skipped).toBe(true);
+  expect(result.registeredSkip).toBe(true);
+  expect(result.paths).toBeGreaterThan(0);
+});
+
 test('decorative icons stay hidden and labels expose an accessible image', async ({ page }) => {
   await page.evaluate(async () => {
     const entry = '/dist/auto.js'; await import(entry);

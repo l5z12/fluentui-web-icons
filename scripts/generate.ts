@@ -1,7 +1,8 @@
-import { mkdir, readdir, rm, rename } from 'node:fs/promises';
+import { cp, mkdir, readdir, rename, rm } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import type { IconDefinition, IconGlyph, IconVariant } from '../src/types.js';
 import { parseSvg } from './svg.js';
+import { writeExplorerFavicon } from './write-favicon.js';
 
 const root = resolve(import.meta.dir, '..');
 const upstream = join(root, 'node_modules/@fluentui/svg-icons');
@@ -10,6 +11,7 @@ const staging = join(root, 'src/.generated-staging');
 const upstreamPackage = await Bun.file(join(upstream, 'package.json')).json();
 const sourceFiles = (await readdir(join(upstream, 'icons'))).filter((name) => /_(regular|filled|color)\.svg$/.test(name)).sort();
 if (sourceFiles.length === 0) throw new Error('No Fluent SVGs found. Run bun install first.');
+await writeExplorerFavicon();
 
 const families = new Map<string, IconGlyph[]>();
 const digest = new Bun.CryptoHasher('sha256');
@@ -81,6 +83,28 @@ await Bun.write(join(staging, 'catalog.d.ts'), `${header}import type { IconName 
 await Bun.write(join(staging, 'loaders.js'), `${header}export const iconLoaders = Object.freeze({\n${names.map((name) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(`./icons/${name}.js`)}).then(module => module.default),`).join('\n')}\n});\n`);
 await Bun.write(join(staging, 'loaders.d.ts'), `${header}import type { IconName } from './names.js';\nimport type { IconDefinition } from '../types.js';\nexport declare const iconLoaders: Readonly<Record<IconName, () => Promise<IconDefinition>>>;\n`);
 await Bun.write(join(staging, 'metadata.json'), `${JSON.stringify({ upstreamVersion: upstreamPackage.version, families: names.length, glyphs: sourceFiles.length, fingerprint }, null, 2)}\n`);
-await rm(destination, { recursive: true, force: true });
-await rename(staging, destination);
+await publishGenerated(staging, destination);
 console.log(`Generated ${names.length.toLocaleString()} icon families / ${sourceFiles.length.toLocaleString()} glyphs from @fluentui/svg-icons ${upstreamPackage.version}.`);
+
+/** Windows often keeps a handle on `src/generated`, so rename-over-delete fails with EPERM. */
+async function publishGenerated(from: string, to: string): Promise<void> {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      await rm(to, { recursive: true, force: true });
+      await rename(from, to);
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== 'EPERM' && code !== 'EACCES' && code !== 'EBUSY' && code !== 'EEXIST' && code !== 'ENOTEMPTY') throw error;
+      await Bun.sleep(50 * 2 ** attempt);
+    }
+  }
+  await mkdir(join(to, 'icons'), { recursive: true });
+  await cp(from, to, { recursive: true, force: true });
+  const keep = new Set((await Array.fromAsync(new Bun.Glob('**/*').scan({ cwd: from, onlyFiles: true }))).map((name) => name.replaceAll('\\', '/')));
+  for (const file of await Array.fromAsync(new Bun.Glob('**/*').scan({ cwd: to, onlyFiles: true }))) {
+    const relative = file.replaceAll('\\', '/');
+    if (!keep.has(relative)) await rm(join(to, relative), { force: true });
+  }
+  await rm(from, { recursive: true, force: true });
+}

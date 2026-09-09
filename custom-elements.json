@@ -32,7 +32,10 @@
         { "name": "icon-error", "type": { "text": "CustomEvent<IconErrorDetail>" }, "description": "Bubbles and is composed. Detail contains name and error." }
       ],
       "cssProperties": [{ "name": "--fluent-icon-size", "description": "CSS length overriding visual width and height. Does not change optical design selection.", "default": "1em" }],
-      "cssParts": [{ "name": "svg", "description": "The SVG element in the open shadow root." }]
+      "cssParts": [
+        { "name": "svg", "description": "The SVG element in the open shadow root." },
+        { "name": "skeleton", "description": "Placeholder shown while a lazy family import is in flight. Absent for cached icons." }
+      ]
     }],
     "exports": [{ "kind": "js", "name": "FluentIcon", "declaration": { "name": "FluentIcon", "module": "dist/fluent-icon.js" } }]
   }]

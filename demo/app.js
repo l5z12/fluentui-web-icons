@@ -1,4 +1,4 @@
-import { applyDemoTheme } from './generated/components.js';
+import { toggleDemoTheme } from './generated/components.js';
 import './dist/auto.js';
 import { iconCatalog, glyphCount, upstreamVersion } from './dist/generated/catalog.js';
 
@@ -116,11 +116,7 @@ for (const view of ['explorer', 'guide']) $(`#${view}-nav`).addEventListener('cl
     else $(`#${name}-nav`).removeAttribute('aria-current');
   }
 });
-$('#theme').addEventListener('click', () => {
-  const dark = document.documentElement.dataset.theme !== 'dark';
-  applyDemoTheme(dark);
-  $('#theme').setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
-});
+$('#theme').addEventListener('click', toggleDemoTheme);
 document.addEventListener('keydown', (event) => {
   const editing = event.composedPath().some((node) => node instanceof HTMLElement && (['INPUT', 'TEXTAREA', 'SELECT'].includes(node.tagName) || node.isContentEditable));
   if (event.key === '/' && !editing) {

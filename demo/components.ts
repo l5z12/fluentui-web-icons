@@ -17,9 +17,27 @@ await Promise.all([
 ]);
 await Updates.next();
 
+const scheme = globalThis.matchMedia?.('(prefers-color-scheme: dark)');
+let followSystem = true;
+
 export function applyDemoTheme(dark: boolean): void {
   setTheme(dark ? webDarkTheme : webLightTheme);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const button = document.querySelector('#theme');
+  button?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
+  button?.querySelector('fluent-icon')?.setAttribute('name', dark ? 'weather-sunny' : 'weather-moon');
 }
 
-applyDemoTheme(false);
+export function toggleDemoTheme(): void {
+  followSystem = false;
+  applyDemoTheme(document.documentElement.dataset.theme !== 'dark');
+}
+
+if (scheme) {
+  applyDemoTheme(scheme.matches);
+  scheme.addEventListener('change', () => {
+    if (followSystem) applyDemoTheme(scheme.matches);
+  });
+} else {
+  applyDemoTheme(false);
+}

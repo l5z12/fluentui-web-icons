@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="This Fluent icon explorer page does not exist." />
     <title>Not found — Fluent icons</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f6cbd'/%3E%3Cpath d='M10 8h14v5H15v3h7v5h-7v5h-5z' fill='white'/%3E%3C/svg%3E" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./favicon.svg" />
     <link rel="stylesheet" href="./style.css" />
+    <script>document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';</script>
     <script type="module" src="./404.js"></script>
   </head>
   <body>
     <aside class="sidebar">
-      <a class="brand" href="./" aria-label="Fluent icons home"><span class="brand-mark">f.</span><span>fluent<span class="brand-light">icons</span></span></a>
+      <a class="brand" href="./" aria-label="Fluent icons home"><span class="brand-mark" aria-hidden="true"><fluent-icon name="mail" variant="color" size="14"></fluent-icon><fluent-icon name="home" variant="color" size="14"></fluent-icon><fluent-icon name="code" variant="color" size="14"></fluent-icon><fluent-icon name="star" variant="color" size="14"></fluent-icon></span><span>fluent<span class="brand-light">icons</span></span></a>
       <div class="edition">THE WEB COMPONENT COLLECTION</div>
       <nav aria-label="Main navigation">
         <fluent-button id="explorer-nav" appearance="subtle" class="nav-item"><fluent-icon slot="start" name="grid" size="20"></fluent-icon>Icon explorer</fluent-button>

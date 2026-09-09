@@ -4,6 +4,8 @@ import { expect, test } from '@playwright/test';
 // Fluent buttons expose their role through ElementInternals (verified in the browser AX tree).
 const button = (page: import('@playwright/test').Page, text: string) => page.locator('fluent-button').filter({ hasText: text });
 
+test.use({ colorScheme: 'light' });
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
@@ -27,6 +29,19 @@ test('explorer searches, selects, switches styles, and handles empty results', a
   await button(page, 'Clear search').click();
   await expect(page.locator('.icon-card')).toHaveCount(72);
   expect(errors).toEqual([]);
+});
+
+test('follows the system color scheme until the toggle is used', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.locator('fluent-button[aria-label="Switch to dark theme"]').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
 
 test('guide, pagination, theme and keyboard search work', async ({ page }) => {

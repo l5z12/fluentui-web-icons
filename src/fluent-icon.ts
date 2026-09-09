@@ -1,4 +1,4 @@
-import { loadIcon, normalizeIconName, selectGlyph, subscribe } from './registry.js';
+import { getIcon, loadIcon, normalizeIconName, selectGlyph, subscribe } from './registry.js';
 import type { IconErrorDetail, IconLoadDetail, IconVariant } from './types.js';
 import { appendSvgNodes } from './svg-tree.js';
 
@@ -11,6 +11,9 @@ const css = `
   :host([hidden]) { display: none; }
   svg { display: block; width: 100%; height: 100%; fill: currentColor; overflow: hidden; }
   :host([flip-rtl]:dir(rtl)) svg { transform: scaleX(-1); }
+  [part="skeleton"] { display: block; box-sizing: border-box; width: 100%; height: 100%; border-radius: 22%; background: currentColor; opacity: 0.16; pointer-events: none; animation: fluent-icon-skeleton 1.2s ease-in-out infinite; }
+  @keyframes fluent-icon-skeleton { 50% { opacity: 0.07; } }
+  @media (prefers-reduced-motion: reduce) { [part="skeleton"] { animation: none; } }
 `;
 
 /** A decorative-by-default, framework-independent Fluent System Icon. */
@@ -20,6 +23,7 @@ export class FluentIcon extends BaseElement {
   #revision = 0;
   #queued = false;
   #svg?: SVGSVGElement;
+  #skeleton?: HTMLElement;
   #complete: Promise<void> = Promise.resolve();
 
   constructor() {
@@ -100,14 +104,37 @@ export class FluentIcon extends BaseElement {
     });
   }
 
+  #showSkeleton(): void {
+    if (this.#skeleton) return;
+    const skeleton = this.ownerDocument.createElement('span');
+    skeleton.setAttribute('part', 'skeleton');
+    skeleton.setAttribute('aria-hidden', 'true');
+    this.#skeleton = skeleton;
+    this.shadowRoot!.append(skeleton);
+  }
+
+  #hideSkeleton(): void {
+    this.#skeleton?.remove();
+    this.#skeleton = undefined;
+  }
+
   async #render(revision: number): Promise<void> {
     const name = this.name;
     const size = this.size;
     if (size === undefined) this.style.removeProperty('--_fluent-icon-size');
     else this.style.setProperty('--_fluent-icon-size', `${size}px`);
-    this.#svg?.remove();
-    this.#svg = undefined;
-    if (!name || !this.isConnected) return;
+    if (!name || !this.isConnected) {
+      this.#svg?.remove();
+      this.#svg = undefined;
+      this.#hideSkeleton();
+      return;
+    }
+    const waiting = !getIcon(name);
+    if (waiting) {
+      this.#svg?.remove();
+      this.#svg = undefined;
+      this.#showSkeleton();
+    }
     try {
       const definition = await loadIcon(name);
       if (revision !== this.#revision || !this.isConnected) return;
@@ -137,6 +164,8 @@ export class FluentIcon extends BaseElement {
         svg.append(path);
       }
       if (glyph.nodes) appendSvgNodes(svg, glyph.nodes, `fi${++svgInstance}-`);
+      this.#svg?.remove();
+      this.#hideSkeleton();
       this.#svg = svg;
       this.shadowRoot!.append(svg);
       this.dispatchEvent(new CustomEvent<IconLoadDetail>('icon-load', {
@@ -144,6 +173,9 @@ export class FluentIcon extends BaseElement {
       }));
     } catch (error) {
       if (revision !== this.#revision || !this.isConnected) return;
+      this.#svg?.remove();
+      this.#svg = undefined;
+      this.#hideSkeleton();
       this.dispatchEvent(new CustomEvent<IconErrorDetail>('icon-error', {
         detail: { name, error: error instanceof Error ? error : new Error(String(error)) }, bubbles: true, composed: true,
       }));

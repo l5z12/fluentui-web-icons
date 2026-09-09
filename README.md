@@ -137,7 +137,9 @@ icon.addEventListener('icon-error', ({ detail }) => console.error(detail.error))
 ```
 
 Both events bubble and cross shadow boundaries. `updateComplete` waits for
-lazy imports. Load failures are events, not rejected update promises.
+lazy imports. While a family is downloading, the element shows a `skeleton`
+part; cached icons skip it. Load failures are events, not rejected update
+promises.
 
 ### Styling and accessibility
 
