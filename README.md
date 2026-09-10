@@ -7,7 +7,7 @@ This is an independent wrapper, not an official Microsoft package. The artwork i
 from [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons).
 
 <!-- icon-stats:start -->
-**2,971 families / 20,431 designs**, generated from `@fluentui/svg-icons` 1.1.339.
+**2,971 families / 20,431 designs**, generated from `@fluentui/svg-icons` 1.1.340.
 <!-- icon-stats:end -->
 
 [![npm](https://img.shields.io/npm/v/fluentui-web-icons.svg)](https://www.npmjs.com/package/fluentui-web-icons)

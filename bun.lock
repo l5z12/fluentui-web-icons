@@ -6,7 +6,7 @@
       "name": "fluentui-web-icons",
       "devDependencies": {
         "@arethetypeswrong/cli": "0.18.4",
-        "@fluentui/svg-icons": "1.1.339",
+        "@fluentui/svg-icons": "^1.1.340",
         "@fluentui/tokens": "1.0.0-alpha.24",
         "@fluentui/web-components": "3.1.3",
         "@microsoft/fast-element": "3.0.2",
@@ -100,7 +100,7 @@
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.28.1", "", { "os": "win32", "cpu": "x64" }, "sha512-bm4Mowrv+GXMlpWX++EcXw/iLyd1o3+bJkC2DkWXYVvgZCqD/bSj9ctZeAMC3cIxgjRVR2Dufaiu4YPxr5gW1A=="],
 
-    "@fluentui/svg-icons": ["@fluentui/svg-icons@1.1.339", "", {}, "sha512-qUH14AzJ9xifynp1FvmArVVvldw42OIlKImAMo2MbZsKcvKbFjnUy9TwE/doBplIqMKt4uCRheD/L/P9fCzBRQ=="],
+    "@fluentui/svg-icons": ["@fluentui/svg-icons@1.1.340", "", {}, "sha512-HJdsR91qDCjEoo4aZcXsRtFE9H2utBtpKzHd4QpJMB7E5gSDv7ys3Q3jit0vQRVM2hp03ZbMMv4ESQvvlxwF7A=="],
 
     "@fluentui/tokens": ["@fluentui/tokens@1.0.0-alpha.24", "", { "dependencies": { "@swc/helpers": "^0.5.1" } }, "sha512-YrjGQfnxBR+9o8wXyTflON3Ohsv7OrZWYLVRU+7RaiFO1gcu36iDm3WjudlVmYuWRLDO0Gmxotm6RQNhbZuEQQ=="],
 
