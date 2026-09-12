@@ -20,4 +20,10 @@ if (!changelog.includes(`\n${heading}\n`) && !changelog.startsWith(`${heading}\n
   const entry = `${heading}\n\n- Sync icon artwork from \`@fluentui/svg-icons\` ${version}.\n`;
   await Bun.write(changelogPath, changelog.replace('# Changelog\n', `# Changelog\n\n${entry}`));
 }
+
+const readmePath = join(root, 'README.md');
+const readme = await Bun.file(readmePath).text();
+await Bun.write(readmePath, readme
+  .replace(/git tag v\d+\.\d+\.\d+/g, `git tag v${version}`)
+  .replace(/git push origin v\d+\.\d+\.\d+/g, `git push origin v${version}`));
 console.log(`Package version set to ${version} to match @fluentui/svg-icons.`);

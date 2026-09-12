@@ -212,7 +212,7 @@ Open http://127.0.0.1:5173 for search, preview, and copyable examples.
 default branch deploys the same explorer to [icons.l5z12.dev](https://icons.l5z12.dev)
 as Cloudflare Workers static assets.
 
-The demo UI uses Fluent UI Web Components 3.1.3. Those demo dependencies are
+The demo UI uses Fluent UI Web Components. Those demo dependencies are
 bundled into `demo/generated/` and are not part of the published icon package.
 
 ## Development

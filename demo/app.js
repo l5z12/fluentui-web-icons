@@ -12,7 +12,7 @@ const state = { query: '', variant: 'color', size: 24, page: 0, tint: undefined,
 const pageSize = 72;
 $('#family-count').textContent = iconCatalog.length.toLocaleString();
 $('#collection-count').textContent = iconCatalog.length.toLocaleString();
-$('#upstream-version').textContent = upstreamVersion;
+for (const node of document.querySelectorAll('.upstream-version')) node.textContent = upstreamVersion;
 $('#collection-count').title = `${glyphCount.toLocaleString()} individual SVG designs`;
 
 function renderGallery() {
