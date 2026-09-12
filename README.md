@@ -7,7 +7,7 @@ This is an independent wrapper, not an official Microsoft package. The artwork i
 from [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons).
 
 <!-- icon-stats:start -->
-**2,971 families / 20,431 designs**, generated from `@fluentui/svg-icons` 1.1.340.
+**2,981 families / 20,523 designs**, generated from `@fluentui/svg-icons` 1.1.341.
 <!-- icon-stats:end -->
 
 [![npm](https://img.shields.io/npm/v/fluentui-web-icons.svg)](https://www.npmjs.com/package/fluentui-web-icons)
@@ -276,8 +276,8 @@ publishes, tags `v{version}`, and publishes — only once the package is already
 on the registry.
 
 ```sh
-git tag v1.1.339
-git push origin v1.1.339
+git tag v1.1.341
+git push origin v1.1.341
 ```
 
 ```sh
