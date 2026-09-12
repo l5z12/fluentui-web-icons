@@ -48,7 +48,7 @@ jobs:
         uses: siiway/verified_bot_commit@v0
         with:
           ref: ${{ github.event.repository.default_branch }}
-          message: Sync icons from @fluentui/svg-icons ${{ steps.version.outputs.version }}
+          message: icons: sync from @fluentui/svg-icons ${{ steps.version.outputs.version }}
           if-no-commit: info
           files: |
             package.json
