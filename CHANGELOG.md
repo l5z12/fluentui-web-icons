@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.342
+
+- Sync icon artwork from `@fluentui/svg-icons` 1.1.342.
+
 ## 1.1.341
 
 - Sync icon artwork from `@fluentui/svg-icons` 1.1.341.
