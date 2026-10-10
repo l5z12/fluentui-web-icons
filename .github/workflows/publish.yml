@@ -37,14 +37,15 @@ jobs:
       - run: bun scripts/set-publish-metadata.ts
       - run: npm install -g npm@latest
       - id: npm
+        name: Check the actual version before publishing
         run: |
           name="$(node -p "require('./package.json').name")"
           version="$(node -p "require('./package.json').version")"
-          code="$(curl -sS -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/${name}/${version}")"
-          if [ "$code" = "200" ]; then echo "exists=true" >> "$GITHUB_OUTPUT"
-          else echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-      - if: steps.npm.outputs.exists == 'true'
-        run: echo "This version is already on npm; skipping publish."
-      - if: steps.npm.outputs.exists != 'true'
+          code="$(curl -sS --max-time 30 -H 'Cache-Control: no-cache' -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/${name}/${version}")"
+          case "$code" in
+            200) echo "exists=true" >> "$GITHUB_OUTPUT"; echo "This version is already on npm; skipping publish." ;;
+            404) echo "exists=false" >> "$GITHUB_OUTPUT" ;;
+            *) echo "npm version lookup failed (HTTP $code)" >&2; exit 1 ;;
+          esac
+      - if: steps.npm.outputs.exists == 'false'
         run: npm publish

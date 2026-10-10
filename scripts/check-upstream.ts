@@ -19,7 +19,7 @@ async function npmLatest(name: string): Promise<string> {
   const response = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}/latest`, { headers: { accept: 'application/json', 'user-agent': 'fluentui-web-icons-sync' } });
   if (!response.ok) throw new Error(`Failed to read ${name} from npm (${response.status})`);
   const body = await response.json() as { version?: string };
-  if (!body.version) throw new Error(`npm latest for ${name} has no version`);
+  if (!body.version || !/^\d+\.\d+\.\d+$/.test(body.version)) throw new Error(`npm latest for ${name} has an invalid version`);
   return body.version;
 }
 
@@ -31,11 +31,10 @@ async function npmListed(name: string): Promise<boolean> {
 }
 
 async function npmHasVersion(name: string, version: string): Promise<boolean> {
-  const response = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}`, { headers: { accept: 'application/json', 'user-agent': 'fluentui-web-icons-sync' } });
+  const response = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`, { headers: { accept: 'application/json', 'cache-control': 'no-cache', 'user-agent': 'fluentui-web-icons-sync' } });
   if (response.status === 404) return false;
   if (!response.ok) throw new Error(`Failed to read ${name} from npm (${response.status})`);
-  const body = await response.json() as { versions?: Record<string, unknown> };
-  return Object.hasOwn(body.versions ?? {}, version);
+  return true;
 }
 
 async function setOutput(values: Record<string, string | boolean>): Promise<void> {

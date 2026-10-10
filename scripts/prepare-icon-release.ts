@@ -4,6 +4,10 @@ const root = resolve(import.meta.dir, '..');
 const upstream = await Bun.file(join(root, 'node_modules/@fluentui/svg-icons/package.json')).json();
 const version = String(upstream.version ?? '');
 if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error(`Unexpected @fluentui/svg-icons version: ${version}`);
+const expected = process.argv[2];
+if ((expected !== undefined || process.env.GITHUB_ACTIONS === 'true') && version !== expected) {
+  throw new Error(`Expected @fluentui/svg-icons ${expected ?? '(missing target)'}, but installed ${version}. Refusing to prepare a different release.`);
+}
 
 const packagePath = join(root, 'package.json');
 const pkg = await Bun.file(packagePath).json();

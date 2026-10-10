@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: sync-icons
+  group: npm-publish
   cancel-in-progress: false
 
 permissions:
@@ -34,9 +34,15 @@ jobs:
       - if: steps.check.outputs.release != 'true'
         run: echo "Already in sync with @fluentui/svg-icons ${{ steps.check.outputs.latest }}"
       - if: steps.check.outputs.release == 'true' && steps.check.outputs.update_dependency == 'true'
-        run: bun update @fluentui/svg-icons --latest
+        name: Install the exact detected upstream version
+        env:
+          EXPECTED_VERSION: ${{ steps.check.outputs.latest }}
+        run: bun add --dev --exact --no-cache "@fluentui/svg-icons@$EXPECTED_VERSION"
       - if: steps.check.outputs.release == 'true'
-        run: bun scripts/prepare-icon-release.ts
+        name: Verify and prepare the detected release
+        env:
+          EXPECTED_VERSION: ${{ steps.check.outputs.latest }}
+        run: bun scripts/prepare-icon-release.ts "$EXPECTED_VERSION"
       - if: steps.check.outputs.release == 'true'
         run: bun run test
       - if: steps.check.outputs.release == 'true'
@@ -67,6 +73,21 @@ jobs:
       - if: steps.check.outputs.release == 'true'
         run: npm install -g npm@latest
       - if: steps.check.outputs.release == 'true'
+        name: Check the actual version before publishing
+        id: npm
+        env:
+          EXPECTED_VERSION: ${{ steps.check.outputs.latest }}
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          test "$version" = "$EXPECTED_VERSION"
+          code="$(curl -sS --max-time 30 -H 'Cache-Control: no-cache' -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/${name}/${version}")"
+          case "$code" in
+            200) echo "exists=true" >> "$GITHUB_OUTPUT"; echo "This version is already on npm; skipping publish." ;;
+            404) echo "exists=false" >> "$GITHUB_OUTPUT" ;;
+            *) echo "npm version lookup failed (HTTP $code)" >&2; exit 1 ;;
+          esac
+      - if: steps.check.outputs.release == 'true' && steps.npm.outputs.exists == 'false'
         run: npm publish
       - if: steps.check.outputs.release == 'true'
         env:
